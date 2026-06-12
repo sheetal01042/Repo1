@@ -1,0 +1,1691 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#09020b" />
+    <title>Mr. Pookie Sharma</title>
+    <style>
+      :root {
+        --ink: #050208;
+        --midnight: #07091f;
+        --blackberry: #17091b;
+        --merlot: #381025;
+        --rosewood: #783049;
+        --champagne: #efd28f;
+        --champagne-soft: #fff2c5;
+        --blush: #d99a91;
+        --ivory: #fff8ec;
+        --muted: rgb(255 255 255 / 85%);
+        --glass: rgba(255, 255, 255, 0.105);
+        --glass-deep: rgba(45, 15, 34, 0.36);
+        --line: rgba(239, 210, 143, 0.32);
+        --shadow: 0 28px 90px rgba(0, 0, 0, 0.46);
+        --radius: 22px;
+      }
+
+      * {
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      html,
+      body {
+        width: 100%;
+        min-height: 100%;
+        margin: 0;
+        overflow-x: hidden;
+        background: var(--ink);
+        color: var(--ivory);
+        font-family:
+          "Avenir Next",
+          Avenir,
+          Optima,
+          "Helvetica Neue",
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+      }
+
+      body {
+        min-height: 100svh;
+        line-height: 1.55;
+      }
+
+      button,
+      a {
+        color: inherit;
+        font: inherit;
+      }
+
+      button {
+        border: 0;
+        cursor: pointer;
+      }
+
+      .app {
+        position: relative;
+        min-height: 100svh;
+        isolation: isolate;
+        overflow: hidden;
+        background:
+          radial-gradient(
+            circle at 14% 13%,
+            rgba(120, 48, 73, 0.58),
+            transparent 30%
+          ),
+          radial-gradient(
+            circle at 82% 8%,
+            rgba(239, 210, 143, 0.2),
+            transparent 24%
+          ),
+          radial-gradient(
+            circle at 72% 78%,
+            rgba(78, 31, 93, 0.38),
+            transparent 34%
+          ),
+          radial-gradient(
+            circle at 42% 50%,
+            rgba(217, 154, 145, 0.13),
+            transparent 34%
+          ),
+          linear-gradient(
+            145deg,
+            #050208 0%,
+            #07091f 38%,
+            #240a26 66%,
+            #09020b 100%
+          );
+      }
+
+      .app::before {
+        position: fixed;
+        inset: -30%;
+        z-index: -5;
+        background: conic-gradient(
+          from 130deg at 50% 50%,
+          transparent,
+          rgba(239, 210, 143, 0.12),
+          transparent,
+          rgba(120, 48, 73, 0.18),
+          transparent,
+          rgba(74, 24, 62, 0.18),
+          transparent
+        );
+        content: "";
+        filter: blur(80px);
+        opacity: 0.8;
+        animation: slowTurn 22s linear infinite;
+      }
+
+      .app::after {
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        background:
+          linear-gradient(
+            to bottom,
+            rgba(0, 0, 0, 0.22),
+            transparent 36%,
+            rgba(0, 0, 0, 0.5)
+          ),
+          radial-gradient(
+            circle at center,
+            transparent 0%,
+            rgba(0, 0, 0, 0.3) 68%,
+            rgba(0, 0, 0, 0.74) 100%
+          );
+        content: "";
+        pointer-events: none;
+      }
+
+      .particles,
+      .confetti {
+        position: fixed;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+      }
+
+      .particles {
+        z-index: -2;
+      }
+
+      .confetti {
+        z-index: 12;
+      }
+
+      .particle {
+        position: absolute;
+        left: var(--x);
+        top: var(--y);
+        color: var(--color);
+        font-size: var(--size);
+        opacity: var(--opacity);
+        text-shadow: 0 0 18px rgba(239, 210, 143, 0.5);
+        animation: heartDrift var(--duration) ease-in-out infinite alternate;
+      }
+
+      .loader {
+        position: fixed;
+        inset: 0;
+        z-index: 40;
+        display: grid;
+        place-items: center;
+        background: #050208;
+        transition:
+          opacity 0.65s ease,
+          visibility 0.65s ease;
+      }
+
+      .loader.hide {
+        visibility: hidden;
+        opacity: 0;
+      }
+
+      .loader-ring {
+        position: relative;
+        width: 84px;
+        height: 84px;
+        border-radius: 50%;
+        border: 1px solid rgba(239, 210, 143, 0.18);
+        box-shadow: 0 0 42px rgba(239, 210, 143, 0.15);
+      }
+
+      .loader-ring::before {
+        position: absolute;
+        inset: -2px;
+        border: 2px solid transparent;
+        border-top-color: var(--champagne-soft);
+        border-right-color: var(--blush);
+        border-radius: inherit;
+        content: "";
+        animation: spin 1s linear infinite;
+      }
+
+      .music-toggle {
+        position: fixed;
+        top: max(14px, env(safe-area-inset-top));
+        right: max(14px, env(safe-area-inset-right));
+        z-index: 20;
+        display: grid;
+        width: 44px;
+        height: 44px;
+        place-items: center;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.08);
+        box-shadow: 0 16px 38px rgba(0, 0, 0, 0.28);
+        backdrop-filter: blur(18px);
+      }
+
+      .screen {
+        display: none;
+        min-height: 100svh;
+        padding: max(22px, env(safe-area-inset-top)) 16px
+          max(22px, env(safe-area-inset-bottom));
+        place-items: center;
+      }
+
+      .screen.active {
+        display: grid;
+        animation: screenIn 0.62s cubic-bezier(0.16, 1, 0.3, 1) both;
+      }
+
+      .screen.leaving {
+        animation: screenOut 0.3s ease both;
+      }
+
+      .glass {
+        position: relative;
+        border: 1px solid var(--line);
+        background:
+          linear-gradient(
+            145deg,
+            rgba(255, 255, 255, 0.16),
+            rgba(255, 255, 255, 0.052)
+          ),
+          linear-gradient(
+            180deg,
+            rgba(120, 48, 73, 0.14),
+            rgba(7, 9, 31, 0.18)
+          ),
+          var(--glass);
+        box-shadow:
+          var(--shadow),
+          inset 0 1px 0 rgba(255, 255, 255, 0.18);
+        backdrop-filter: blur(24px);
+      }
+
+      .glass::before {
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.22),
+          transparent 34%,
+          rgba(239, 210, 143, 0.12)
+        );
+        content: "";
+        pointer-events: none;
+      }
+
+      .card,
+      .wide-card,
+      .experience-card,
+      .note-card {
+        border-radius: var(--radius);
+      }
+
+      .card {
+        width: min(100%, 620px);
+        padding: clamp(26px, 7vw, 70px);
+        text-align: center;
+      }
+
+      .wide-card {
+        width: min(100%, 920px);
+        overflow: hidden;
+      }
+
+      .experience-card {
+        width: min(100%, 930px);
+        padding: clamp(18px, 4vw, 34px);
+        text-align: center;
+      }
+
+      .eyebrow {
+        position: relative;
+        display: inline-flex;
+        margin-bottom: 14px;
+        color: var(--champagne-soft);
+        font-size: 0.71rem;
+        font-weight: 700;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        position: relative;
+        margin-top: 0;
+      }
+
+      h1,
+      h2 {
+        margin-bottom: 14px;
+        font-family:
+          "Iowan Old Style", "Palatino Linotype", Palatino, Baskerville,
+          Georgia, serif;
+        font-weight: 500;
+        letter-spacing: 0;
+        text-wrap: balance;
+        margin-bottom: 2rem;
+      }
+
+      h1 {
+        font-size: clamp(2.15rem, 9vw, 3.5rem);
+        line-height: 1.02;
+      }
+
+      h2 {
+        font-size: clamp(2.1rem, 6.6vw, 3.05rem);
+        line-height: 1.08;
+      }
+
+      h3 {
+        margin-bottom: 10px;
+        font-size: clamp(1.15rem, 4vw, 1.55rem);
+        font-weight: 650;
+      }
+
+      p {
+        margin-bottom: 20px;
+        color: var(--muted);
+        font-size: clamp(0.98rem, 3.7vw, 1.12rem);
+      }
+
+      .line-text {
+        white-space: pre-line;
+      }
+
+      .actions {
+        position: relative;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 12px;
+        margin-top: 24px;
+      }
+
+      .btn {
+        position: relative;
+        display: inline-grid;
+        min-height: 70px;
+        min-width: 150px;
+        place-items: center;
+        overflow: hidden;
+        padding: 0 30px;
+        border: 1px solid rgba(239, 210, 143, 0.42);
+        border-radius: 12px;
+        background:
+          linear-gradient(
+            135deg,
+            rgba(239, 210, 143, 0.32),
+            rgba(217, 154, 145, 0.18)
+          ),
+          rgba(255, 255, 255, 0.08);
+        box-shadow:
+          0 14px 34px rgba(0, 0, 0, 0.28),
+          inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        color: var(--ivory);
+        font-weight: 600;
+        text-decoration: none;
+        transition:
+          transform 0.24s ease,
+          border-color 0.24s ease,
+          box-shadow 0.24s ease;
+      }
+
+      .btn::after {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          100deg,
+          transparent,
+          rgba(255, 255, 255, 0.24),
+          transparent
+        );
+        content: "";
+        transform: translateX(-120%);
+        transition: transform 0.52s ease;
+      }
+
+      .btn:hover,
+      .btn:focus-visible {
+        border-color: rgba(255, 242, 197, 0.75);
+        box-shadow:
+          0 18px 42px rgba(0, 0, 0, 0.36),
+          0 0 24px rgba(239, 210, 143, 0.18);
+        outline: none;
+        transform: translateY(-2px);
+      }
+
+      .btn:hover::after,
+      .btn:focus-visible::after {
+        transform: translateX(120%);
+      }
+
+      .btn.secondary {
+        border-color: rgba(255, 255, 255, 0.18);
+        background: rgba(255, 255, 255, 0.075);
+        color: rgba(255, 248, 236, 0.82);
+      }
+
+      .pin-card {
+        display: grid;
+        min-height: auto;
+      }
+
+      .pin-art {
+        position: relative;
+        display: grid;
+        min-height: 230px;
+        place-items: center;
+        padding: clamp(14px, 4vw, 26px);
+        overflow: hidden;
+        background:
+          radial-gradient(
+            circle at 50% 38%,
+            rgba(239, 210, 143, 0.16),
+            transparent 36%
+          ),
+          linear-gradient(
+            145deg,
+            rgba(255, 255, 255, 0.085),
+            rgba(255, 255, 255, 0.025)
+          );
+      }
+
+      .pin-image {
+        position: relative;
+        z-index: 1;
+        display: block;
+        width: min(78vw, 330px);
+        max-height: 100%;
+        object-fit: contain;
+        filter: drop-shadow(0 22px 34px rgba(0, 0, 0, 0.34));
+        animation: softFloat 4s ease-in-out infinite;
+      }
+
+      .pin-panel {
+        position: relative;
+        display: grid;
+        align-content: center;
+        padding: clamp(22px, 5vw, 42px);
+        text-align: center;
+      }
+
+      .pin-panel h2 {
+        font-size: clamp(1.42rem, 5.6vw, 2.55rem);
+      }
+
+      .pin-panel p {
+        margin-bottom: 12px;
+      }
+
+      .pin-display {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin: 16px 0 14px;
+      }
+
+      .pin-dot {
+        width: 14px;
+        height: 14px;
+        border: 1px solid rgba(239, 210, 143, 0.44);
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.07);
+        transition:
+          transform 0.2s ease,
+          background 0.2s ease;
+      }
+
+      .pin-dot.filled {
+        background: var(--champagne-soft);
+        box-shadow: 0 0 16px rgba(239, 210, 143, 0.58);
+        transform: scale(1.08);
+      }
+
+      .keypad {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(58px, 74px));
+        justify-content: center;
+        gap: 10px;
+        margin: 14px auto;
+      }
+
+      .key {
+        display: grid;
+        height: 54px;
+        place-items: center;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.075);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.12),
+          0 12px 24px rgba(0, 0, 0, 0.16);
+        font-size: 1.15rem;
+        font-weight: 600;
+        transition:
+          transform 0.18s ease,
+          background 0.18s ease;
+      }
+
+      .key:active {
+        background: rgba(239, 210, 143, 0.18);
+        transform: scale(0.96);
+      }
+
+      .pin-message {
+        min-height: 26px;
+        margin: 6px 0 0;
+        color: var(--champagne-soft);
+        font-weight: 700;
+      }
+
+      .success-burst {
+        display: none;
+        place-items: center;
+        gap: 14px;
+      }
+
+      .success-burst.show {
+        display: grid;
+        animation: popIn 0.62s cubic-bezier(0.16, 1, 0.3, 1) both;
+      }
+
+      .success-mark {
+        display: grid;
+        width: 72px;
+        height: 72px;
+        place-items: center;
+        border: 1px solid rgba(239, 210, 143, 0.46);
+        border-radius: 18px;
+        background: rgba(239, 210, 143, 0.14);
+        color: var(--champagne-soft);
+        font-size: 1.9rem;
+        box-shadow: 0 0 38px rgba(239, 210, 143, 0.28);
+      }
+
+      .ready-actions {
+        min-height: 72px;
+      }
+
+      .home-wrap {
+        width: min(100%, 1040px);
+        display: grid;
+        gap: 20px;
+      }
+
+      .note-card {
+        width: min(100%, 760px);
+        justify-self: center;
+        padding: clamp(22px, 5vw, 34px);
+        text-align: center;
+      }
+
+      .note-card p {
+        margin: 0;
+      }
+
+      .envelopes {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .envelope-card {
+        position: relative;
+        min-height: 220px;
+        padding: 18px 18px 20px;
+        border-radius: 20px;
+        transition:
+          transform 0.26s ease,
+          border-color 0.26s ease,
+          box-shadow 0.26s ease;
+      }
+
+      .envelope-card:hover,
+      .envelope-card:focus-visible {
+        border-color: rgba(255, 242, 197, 0.62);
+        box-shadow:
+          0 28px 72px rgba(0, 0, 0, 0.42),
+          0 0 30px rgba(239, 210, 143, 0.14);
+        outline: none;
+        transform: translateY(-6px);
+      }
+
+      .envelope-img {
+        position: relative;
+        display: block;
+        width: min(84%, 260px);
+        height: 142px;
+        object-fit: contain;
+        margin: 4px auto 16px;
+        filter: drop-shadow(0 22px 28px rgba(0, 0, 0, 0.34));
+        animation: softFloat 4.2s ease-in-out infinite;
+      }
+
+      .envelope-card h3 {
+        margin: 0;
+        font-size: 1.02rem;
+        font-weight: 600;
+        letter-spacing: 0.01em;
+      }
+
+      .check {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        z-index: 2;
+        display: grid;
+        width: 32px;
+        height: 32px;
+        place-items: center;
+        border-radius: 12px;
+        background: rgba(239, 210, 143, 0.16);
+        color: var(--champagne-soft);
+        opacity: 0;
+        transform: scale(0.4) rotate(-12deg);
+      }
+
+      .envelope-card.done .check {
+        opacity: 1;
+        animation: checkPop 0.58s cubic-bezier(0.16, 1, 0.3, 1) both;
+      }
+
+      .top-bar {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 18px;
+      }
+
+      .icon-btn {
+        display: grid;
+        min-width: 42px;
+        height: 42px;
+        place-items: center;
+        padding: 0 13px;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.075);
+        color: rgba(255, 248, 236, 0.8);
+      }
+
+      .stage {
+        position: relative;
+        min-height: 420px;
+        display: grid;
+        place-items: center;
+        overflow: hidden;
+      }
+
+      .stage-content {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        animation: popIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+      }
+
+      .hero-img {
+        position: relative;
+        display: block;
+        width: min(86vw, 420px);
+        max-height: 500px;
+        object-fit: contain;
+        margin: 0 auto 22px;
+        border-radius: 18px;
+        filter: drop-shadow(0 24px 36px rgba(0, 0, 0, 0.34));
+      }
+
+      .letter {
+        width: min(100%, 700px);
+        margin: 0 auto 22px;
+        padding: clamp(24px, 5vw, 42px);
+        border: 1px solid rgba(184, 134, 82, 0.32);
+        border-radius: 14px;
+        background:
+          radial-gradient(
+            circle at 18% 12%,
+            rgba(120, 48, 73, 0.08),
+            transparent 24%
+          ),
+          linear-gradient(
+            145deg,
+            rgba(255, 250, 240, 0.98),
+            rgba(242, 221, 184, 0.94)
+          );
+        box-shadow: 0 28px 70px rgba(0, 0, 0, 0.32);
+        color: #2b1722;
+        text-align: left;
+        animation: letterOpen 0.75s cubic-bezier(0.16, 1, 0.3, 1) both;
+      }
+
+      .letter p {
+        margin: 0;
+        color: #3e2630;
+        font-family: "Iowan Old Style", Palatino, Georgia, serif;
+        font-size: clamp(1rem, 3.7vw, 1.22rem);
+        line-height: 1.75;
+        white-space: pre-line;
+      }
+
+      .memory-intro {
+        width: min(100%, 720px);
+        margin: 0 auto 20px;
+      }
+
+      .memory-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+        width: min(100%, 680px);
+        margin: 0 auto 24px;
+      }
+
+      .memory-card {
+        position: relative;
+        aspect-ratio: 1 / 1.12;
+        border-radius: 16px;
+        perspective: 900px;
+      }
+
+      .memory-inner {
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        transform-style: preserve-3d;
+        transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .memory-card.flipped .memory-inner,
+      .memory-card.matched .memory-inner {
+        transform: rotateY(180deg);
+      }
+
+      .memory-front,
+      .memory-back {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        border-radius: inherit;
+        overflow: hidden;
+        border: 1px solid rgba(239, 210, 143, 0.26);
+        backface-visibility: hidden;
+      }
+
+      .memory-front {
+        background:
+          linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.13),
+            rgba(255, 255, 255, 0.04)
+          ),
+          radial-gradient(
+            circle at 50% 20%,
+            rgba(239, 210, 143, 0.2),
+            transparent 55%
+          ),
+          rgba(255, 255, 255, 0.08);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.16),
+          0 14px 32px rgba(0, 0, 0, 0.22);
+        color: #de4747;
+        font-size: 2rem;
+      }
+
+      .memory-back {
+        transform: rotateY(180deg);
+        background: #120814;
+      }
+
+      .memory-back img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .memory-card.matched {
+        pointer-events: none;
+      }
+
+      .memory-card.matched .memory-back {
+        box-shadow: 0 0 30px rgba(239, 210, 143, 0.36);
+      }
+
+      .confetti-piece {
+        position: absolute;
+        top: -20px;
+        left: var(--x);
+        width: 9px;
+        height: 16px;
+        border-radius: 4px;
+        background: var(--c);
+        animation: confettiFall var(--d) linear forwards;
+      }
+
+      @media (min-width: 720px) {
+        .pin-card {
+          grid-template-columns: 0.9fr 1.1fr;
+        }
+
+        .pin-art {
+          min-height: 560px;
+        }
+
+        .envelopes {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .memory-grid {
+          grid-template-columns: repeat(5, minmax(0, 1fr));
+        }
+
+        .memory-card {
+          aspect-ratio: 1 / 1.24;
+        }
+      }
+
+      @media (max-width: 420px) {
+        .screen {
+          padding-left: 12px;
+          padding-right: 12px;
+        }
+
+        .card {
+          padding: 40px 20px;
+        }
+
+        .pin-art {
+          min-height: 186px;
+        }
+
+        .pin-image {
+          max-height: 250px;
+        }
+
+        .pin-panel {
+          padding: 20px 14px 22px;
+        }
+
+        .keypad {
+          grid-template-columns: repeat(3, minmax(54px, 68px));
+          gap: 9px;
+        }
+
+        .key {
+          height: 50px;
+        }
+
+        .stage {
+          min-height: 380px;
+        }
+
+        .hero-img {
+          max-height: 500px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.001ms !important;
+          animation-iteration-count: 1 !important;
+          scroll-behavior: auto !important;
+          transition-duration: 0.001ms !important;
+        }
+      }
+
+      @keyframes slowTurn {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      @keyframes heartDrift {
+        from {
+          transform: translate3d(-8px, 0, 0) rotate(-4deg);
+        }
+        to {
+          transform: translate3d(12px, -28px, 0) rotate(7deg);
+        }
+      }
+
+      @keyframes screenIn {
+        from {
+          opacity: 0;
+          transform: translateY(14px) scale(0.988);
+          filter: blur(8px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+          filter: blur(0);
+        }
+      }
+
+      @keyframes screenOut {
+        to {
+          opacity: 0;
+          transform: translateY(-10px) scale(0.99);
+          filter: blur(8px);
+        }
+      }
+
+      @keyframes softFloat {
+        50% {
+          transform: translateY(-9px) rotate(0.8deg);
+        }
+      }
+
+      @keyframes popIn {
+        from {
+          opacity: 0;
+          transform: translateY(16px) scale(0.965);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+
+      @keyframes checkPop {
+        45% {
+          opacity: 1;
+          transform: scale(1.18) rotate(7deg);
+        }
+        100% {
+          opacity: 1;
+          transform: scale(1) rotate(0);
+        }
+      }
+
+      @keyframes letterOpen {
+        from {
+          opacity: 0;
+          transform: rotateX(58deg) translateY(24px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+
+      @keyframes confettiFall {
+        to {
+          transform: translate3d(var(--drift), 110svh, 0) rotate(720deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="app" id="app">
+      <div class="particles" id="particles" aria-hidden="true"></div>
+      <div class="confetti" id="confetti" aria-hidden="true"></div>
+      <div class="loader" id="loader" aria-hidden="true">
+        <div class="loader-ring"></div>
+      </div>
+
+      <button
+        class="music-toggle"
+        id="musicToggle"
+        type="button"
+        aria-label="Toggle background music placeholder"
+      >
+        ♪
+      </button>
+      <audio
+        id="bgMusic"
+        loop
+        preload="none"
+        data-placeholder="Add your music file path to the src attribute later"
+      ></audio>
+
+      <section class="screen active" id="introScreen" data-screen>
+        <div class="card glass">
+          <h1>Mr. Pookie Sharma</h1>
+          <p class="line-text">
+            I know remembering dates is still not one of my strongest skills
+            😭🙈 But in my defense... I was a little busy thinking about you ❤️
+            Which is technically your fault 😌 So I made you something...
+          </p>
+          <div class="actions">
+            <button class="btn" type="button" data-go="pinScreen">
+              Are You Ready?
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="screen" id="pinScreen" data-screen>
+        <div class="wide-card glass pin-card">
+          <div class="pin-art" aria-label="Romantic image">
+            <img
+              class="pin-image"
+              id="pinImage"
+              src="https://cdn.shopify.com/s/files/1/0991/9296/3393/files/1000245955.png?v=1781251921"
+              alt="Romantic couple illustration"
+            />
+          </div>
+          <div class="pin-panel">
+            <div id="pinEntry">
+              <span class="eyebrow">secret access</span>
+              <h2>If You Get This Wrong, We Need To Talk 😏</h2>
+              <p>
+                Take a guess... I have a feeling you already know this pin 😌✨
+              </p>
+              <div
+                class="pin-display"
+                id="pinDisplay"
+                aria-label="PIN entry progress"
+              ></div>
+              <div class="keypad" id="keypad" aria-label="PIN keypad"></div>
+              <p class="pin-message" id="pinMessage" aria-live="polite"></p>
+            </div>
+            <div class="success-burst" id="pinSuccess">
+              <div class="success-mark">✓</div>
+              <h2>Okay, I'm Impressed 😌✨</h2>
+              <p>Looks Like You Do Pay Attention ❤️</p>
+              <button class="btn" type="button" data-go="readyScreen">
+                Continue
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="screen" id="readyScreen" data-screen>
+        <div class="card glass">
+          <h2 id="readyTitle">Hey Handsome 😌❤️</h2>
+          <p id="readyText">
+            I have a little surprise waiting for you. Want to see it?
+          </p>
+          <div class="actions ready-actions" id="readyActions">
+            <button class="btn" type="button" id="yesBtn">YES</button>
+            <button class="btn secondary" type="button" id="noBtn">NO</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="screen" id="homeScreen" data-screen>
+        <div class="home-wrap">
+          <div class="note-card glass">
+            <h2>Three Little Envelopes ✨</h2>
+            <p class="line-text">
+              Each one holds a tiny piece of my heart, a memory, a thought, or
+              something I've been wanting to tell you. You can open them in any
+              order... But if you trust me, start with Envelope 1 then Envelope
+              2 and then Envelope 3 😌❤️
+            </p>
+          </div>
+          <div class="envelopes" id="envelopes"></div>
+        </div>
+      </section>
+
+      <section class="screen" id="experienceScreen" data-screen>
+        <div class="experience-card glass">
+          <div class="top-bar">
+            <button
+              class="icon-btn"
+              type="button"
+              id="backHome"
+              aria-label="Close"
+            >
+              ×
+            </button>
+            <span class="eyebrow" id="experienceLabel">envelope</span>
+            <span class="icon-btn" aria-hidden="true">♡</span>
+          </div>
+          <div class="stage" id="stage"></div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const CORRECT_PIN = "1204";
+      const PIN_IMAGE =
+        "https://cdn.shopify.com/s/files/1/0991/9296/3393/files/1000245955.png?v=1781251921";
+      const SUCCESS_IMAGE =
+        "https://cdn.shopify.com/s/files/1/0991/9296/3393/files/1000246061.png";
+      const ENVELOPE_IMAGE =
+        "https://cdn.shopify.com/s/files/1/0991/9296/3393/files/Love-Letter-Envelope-Graphics-25185593-1.png";
+      const BOUQUET_IMAGE =
+        "https://cdn.shopify.com/s/files/1/0587/5194/2749/files/ChatGPT_Image_Jun_12_2026_04_07_37_PM.png";
+      const WHATSAPP_URL = "https://wa.me/917999818001?text=Hey%20%E2%9D%A4%EF%B8%8F%20I%20hope%20you%20enjoyed%20this...%20%F0%9F%98%8C%0A%0ANow%20I%20need%20answers.%20How%20long%20did%20it%20take%20you%20to%20guess%20the%20PIN%3F%20And%20more%20importantly...%20how%20long%20did%20it%20take%20you%20to%20reach%20this%20chat%20after%20I%20literally%20told%20you%20not%20to%20click%20random%20buttons%3F%20%F0%9F%A4%A8%F0%9F%A4%AD%0A%0AI'm%20a%20bit%20packed%20today%2C%20so%20I%20may%20not%20reply%20right%20away%2C%20but%20I%20really%20want%20to%20know%20how%20you%20felt%20while%20going%20through%20everything.%20%E2%9D%A4%EF%B8%8F";
+
+      const teasingMessages = [
+        "Wrong 😏",
+        "Are you serious, guess bhi nhi kar paa rhe ho 😏",
+        "Nope 😌",
+        "Try harder 😭",
+        "Your memory is under review 😂",
+      ];
+
+      const envelopeData = [
+        { id: "flowers", title: "✨ Open Me First", label: "Envelope 1" },
+        { id: "letter", title: "✨ Then Me", label: "Envelope 2" },
+        { id: "memory", title: "✨ And Finally Me", label: "Envelope 3" },
+      ];
+
+      const memoryImages = [
+        {
+          id: "image1",
+          src: "https://cdn.shopify.com/s/files/1/0991/9296/3393/files/1000246068.png",
+        },
+        {
+          id: "image2",
+          src: "https://cdn.shopify.com/s/files/1/0991/9296/3393/files/WhatsApp_Image_2026-05-14_at_23.54.05_ee181d96-ebdd-471d-9dfc-92b1c72e1e0a.jpg",
+        },
+        {
+          id: "image3",
+          src: "https://cdn.shopify.com/s/files/1/0991/9296/3393/files/1000246065.png",
+        },
+        {
+          id: "image4",
+          src: "https://cdn.shopify.com/s/files/1/0991/9296/3393/files/IMG-20260418-WA0112.jpg",
+        },
+        {
+          id: "image5",
+          src: "https://cdn.shopify.com/s/files/1/0991/9296/3393/files/1000246380.jpg",
+        },
+      ];
+
+      const state = {
+        screen: "introScreen",
+        pin: "",
+        readyNoCount: 0,
+        completed: new Set(),
+        activeEnvelope: null,
+        flowerStep: 0,
+        letterStep: 0,
+        memoryFinished: false,
+        flipped: [],
+        matched: new Set(),
+        busy: false,
+      };
+
+      const screens = [...document.querySelectorAll("[data-screen]")];
+      const loader = document.querySelector("#loader");
+      const particles = document.querySelector("#particles");
+      const confetti = document.querySelector("#confetti");
+      const pinDisplay = document.querySelector("#pinDisplay");
+      const keypad = document.querySelector("#keypad");
+      const pinMessage = document.querySelector("#pinMessage");
+      const pinEntry = document.querySelector("#pinEntry");
+      const pinSuccess = document.querySelector("#pinSuccess");
+      const pinImage = document.querySelector("#pinImage");
+      const readyTitle = document.querySelector("#readyTitle");
+      const readyText = document.querySelector("#readyText");
+      const readyActions = document.querySelector("#readyActions");
+      const yesBtn = document.querySelector("#yesBtn");
+      const noBtn = document.querySelector("#noBtn");
+      const envelopes = document.querySelector("#envelopes");
+      const stage = document.querySelector("#stage");
+      const experienceLabel = document.querySelector("#experienceLabel");
+      const backHome = document.querySelector("#backHome");
+      const musicToggle = document.querySelector("#musicToggle");
+      const bgMusic = document.querySelector("#bgMusic");
+
+      function showScreen(id) {
+        if (state.screen === id) return;
+        const current = document.querySelector(`#${state.screen}`);
+        const next = document.querySelector(`#${id}`);
+        if (!next) return;
+        current?.classList.add("leaving");
+        window.setTimeout(() => {
+          screens.forEach((screen) =>
+            screen.classList.remove("active", "leaving"),
+          );
+          next.classList.add("active");
+          state.screen = id;
+          window.scrollTo({ top: 0, behavior: "instant" });
+        }, 300);
+      }
+
+      function createParticles() {
+        const count = window.matchMedia("(min-width: 720px)").matches ? 82 : 48;
+        const hearts = ["♥", "♡", "❤", "✦"];
+        const colors = [
+          "rgba(255, 242, 197, 0.62)",
+          "rgba(217, 154, 145, 0.45)",
+          "rgba(255, 248, 236, 0.28)",
+          "rgba(239, 210, 143, 0.48)",
+        ];
+        particles.innerHTML = "";
+        for (let i = 0; i < count; i++) {
+          const dot = document.createElement("span");
+          dot.className = "particle";
+          dot.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+          dot.style.setProperty("--x", `${Math.random() * 100}%`);
+          dot.style.setProperty("--y", `${Math.random() * 100}%`);
+          dot.style.setProperty("--size", `${8 + Math.random() * 18}px`);
+          dot.style.setProperty("--opacity", `${0.16 + Math.random() * 0.55}`);
+          dot.style.setProperty("--duration", `${3.6 + Math.random() * 5.8}s`);
+          dot.style.setProperty(
+            "--color",
+            colors[Math.floor(Math.random() * colors.length)],
+          );
+          particles.appendChild(dot);
+        }
+      }
+
+      function setupPin() {
+        pinDisplay.innerHTML = "";
+        for (let i = 0; i < CORRECT_PIN.length; i++) {
+          const dot = document.createElement("span");
+          dot.className = "pin-dot";
+          pinDisplay.appendChild(dot);
+        }
+
+        keypad.innerHTML = "";
+        ["1", "2", "3", "4", "5", "6", "7", "8", "9", "⌫", "0", "×"].forEach(
+          (value) => {
+            const button = document.createElement("button");
+            button.className = "key";
+            button.type = "button";
+            button.textContent = value;
+            button.setAttribute(
+              "aria-label",
+              value === "⌫"
+                ? "Delete digit"
+                : value === "×"
+                  ? "Clear PIN"
+                  : `Digit ${value}`,
+            );
+            button.addEventListener("click", () => handlePin(value));
+            keypad.appendChild(button);
+          },
+        );
+      }
+
+      function updatePinDots() {
+        [...pinDisplay.children].forEach((dot, index) => {
+          dot.classList.toggle("filled", index < state.pin.length);
+        });
+      }
+
+      function handlePin(value) {
+        if (value === "⌫") state.pin = state.pin.slice(0, -1);
+        else if (value === "×") state.pin = "";
+        else if (state.pin.length < CORRECT_PIN.length) state.pin += value;
+
+        pinMessage.textContent = "";
+        updatePinDots();
+
+        if (state.pin.length === CORRECT_PIN.length) {
+          if (state.pin === CORRECT_PIN) {
+            pinImage.src = SUCCESS_IMAGE;
+            pinImage.alt = "Romantic success image";
+            pinEntry.style.display = "none";
+            pinSuccess.classList.add("show");
+            burstConfetti(36);
+          } else {
+            pinMessage.textContent =
+              teasingMessages[
+                Math.floor(Math.random() * teasingMessages.length)
+              ];
+            state.pin = "";
+            window.setTimeout(updatePinDots, 240);
+          }
+        }
+      }
+
+      function handleNo() {
+        state.readyNoCount += 1;
+        if (state.readyNoCount === 1) {
+          readyTitle.textContent = "Are You Sure? 🥺";
+          readyText.textContent = "Because I'd really like you to see it.";
+        } else if (state.readyNoCount === 2) {
+          readyTitle.textContent = "Really...? 🥺";
+          readyText.textContent =
+            'I spent my time making this for someone special...\nAnd that someone is currently pressing "No." 😭';
+        } else {
+          readyTitle.textContent = "Last chance, Mr. Pookie Sharma 😤❤️";
+          readyText.textContent =
+            'You can keep clicking "No"...\nBut eventually you\'re going to end up exactly where I want you to be anyway 🤭✨';
+          readyActions.innerHTML = "";
+          const button = document.createElement("button");
+          button.className = "btn";
+          button.type = "button";
+          button.textContent = "Take me there ❤️";
+          button.addEventListener("click", goHome);
+          readyActions.appendChild(button);
+        }
+      }
+
+      function goHome() {
+        renderEnvelopes();
+        showScreen("homeScreen");
+      }
+
+      function renderEnvelopes() {
+        envelopes.innerHTML = "";
+        envelopeData.forEach((item, index) => {
+          const button = document.createElement("button");
+          button.className = `envelope-card glass ${state.completed.has(item.id) ? "done" : ""}`;
+          button.type = "button";
+          button.innerHTML = `
+          <span class="check" aria-hidden="true">✓</span>
+          <img class="envelope-img" src="${ENVELOPE_IMAGE}" alt="">
+          <h3>${item.title}</h3>
+        `;
+          button.style.animationDelay = `${index * 80}ms`;
+          button.addEventListener("click", () => openEnvelope(item.id));
+          envelopes.appendChild(button);
+        });
+      }
+
+      function openEnvelope(id) {
+        state.activeEnvelope = id;
+        experienceLabel.textContent = envelopeData.find(
+          (item) => item.id === id,
+        ).label;
+        showScreen("experienceScreen");
+        window.setTimeout(() => {
+          if (id === "flowers") {
+            state.flowerStep = 0;
+            renderFlowers();
+          }
+          if (id === "letter") {
+            state.letterStep = 0;
+            renderLetter();
+          }
+          if (id === "memory") renderMemoryIntro();
+        }, 300);
+      }
+
+      function stageHTML(html) {
+        stage.innerHTML = `<div class="stage-content">${html}</div>`;
+      }
+
+      function renderFlowers() {
+        if (state.flowerStep === 0) {
+          stageHTML(`
+  <img class="hero-img" src="${BOUQUET_IMAGE}" alt="Romantic bouquet">
+
+  <p class="line-text" style="max-width: 95%;margin:0 auto 24px;font-size: medium;text-align: left;">
+    I couldn't give you a real bouquet right now, so here's a virtual one instead 😌❤️
+
+And no, I didn't pick these flowers randomly. The pink roses are because I genuinely admire the person you are. The yellow roses are for the friendship, comfort, and laughter that I hope we never lose. The sunflowers are for loyalty, because no matter where life takes us, I hope we always find our way back to each other. And the daisies are for all the little moments, memories, and adventures that are still waiting for us.
+
+As for the red roses... let's just say they're for everything we're slowly growing into. For all the feelings that take time, all the beautiful things that can't be rushed, and all the chapters that haven't been written yet. 🤭
+
+Basically, this bouquet is my way of saying that I really like where this story is going, and I'm excited to see where it takes us next, Mr. Pookie Sharma ❤️
+  </p>
+
+  <div class="actions">
+    <button class="btn" type="button" id="stageNext">Want More</button>
+  </div>
+`);
+          document.querySelector("#stageNext").addEventListener("click", () => {
+            state.flowerStep = 1;
+            renderFlowers();
+          });
+          return;
+        }
+
+        if (state.flowerStep === 1) {
+          stageHTML(`
+          <h2 class="line-text">Happy 2nd month to our fix-fix</h2>
+          <div class="actions">
+            <button class="btn" type="button" id="stageNext">Want More</button>
+          </div>
+        `);
+          document.querySelector("#stageNext").addEventListener("click", () => {
+            state.flowerStep = 2;
+            renderFlowers();
+          });
+          return;
+        }
+
+        completeOnly("flowers");
+        stageHTML(`
+        <h2>Bas Itna hi hai 👻👻. Wanna see more things, go to Next Envelope</h2>
+        <div class="actions">
+          <button class="btn secondary" type="button" id="closeEnvelope">Close</button>
+          <button class="btn" type="button" id="nextEnvelope">Next Envelope</button>
+        </div>
+      `);
+        document
+          .querySelector("#closeEnvelope")
+          .addEventListener("click", closeEnvelope);
+        document
+          .querySelector("#nextEnvelope")
+          .addEventListener("click", () => openEnvelope("letter"));
+      }
+
+      function renderLetter() {
+        const sections = [
+          {
+            text: `Mr. Pookie Sharma ❤️,
+
+I know two months might not sound like a very long time to some people, but honestly, these two months have given me so many things that I already don't want to forget. 
+
+If someone had told me a few months ago that one person could become such a regular part of my thoughts, I probably wouldn't have believed them. And yet, here you are showing up in my happiest moments, my random thoughts, and somehow managing to make ordinary days feel a little better.
+
+I don't think about grand gestures when I think about us. I think about our conversations, our teasing, the silly things that somehow become important, and the comfort of knowing there's someone on the other side who genuinely cares. Those little things have quietly become my favorite part of the day.`,
+            button: "Read More",
+          },
+          {
+            text: `These two months haven't just been about memories; they've been about getting to know the person behind the calls, messages, jokes, and endless teasing. And the more I get to know you, the more grateful I am that our paths crossed when they did. And if the last two months are any indication, then I think we have a lot of beautiful memories waiting for us. Thank you for being my favorite person, my favorite distraction, and my favorite reason to smile.`,
+            button: "Wanna Read More",
+          },
+          {
+            text: `So here's my very official 2-month update: I still like talking to you, I still get excited when I see your message, and unfortunately for you, you're stuck with me now. 😌❤️
+
+Happy 2 Months of US ❤️
+
+From,
+Your Future Wife 😌❤️`,
+            button: "There's something more",
+          },
+          {
+            text: `LOL!!! KUCH NHI HAI AB`,
+            button: null,
+          },
+        ];
+
+        const current = sections[state.letterStep];
+        stageHTML(`
+        <div class="letter"><p>${current.text}</p></div>
+        ${
+          current.button
+            ? `<div class="actions"><button class="btn" type="button" id="stageNext">${current.button}</button></div>`
+            : `
+          <div class="actions">
+            <button class="btn secondary" type="button" id="closeEnvelope">Close</button>
+            <button class="btn" type="button" id="nextEnvelope">Next Envelope</button>
+          </div>
+        `
+        }
+      `);
+
+        const next = document.querySelector("#stageNext");
+        if (next) {
+          next.addEventListener("click", () => {
+            state.letterStep += 1;
+            renderLetter();
+          });
+        } else {
+          completeOnly("letter");
+          document
+            .querySelector("#closeEnvelope")
+            .addEventListener("click", closeEnvelope);
+          document
+            .querySelector("#nextEnvelope")
+            .addEventListener("click", () => openEnvelope("memory"));
+        }
+      }
+
+      function renderMemoryIntro() {
+        state.flipped = [];
+        state.matched = new Set();
+        state.busy = false;
+        state.memoryFinished = false;
+        const deck = shuffle(
+          [...memoryImages, ...memoryImages].map((item, index) => ({
+            ...item,
+            key: `${item.id}-${index}`,
+          })),
+        );
+        stageHTML(`
+        <div class="memory-intro">
+          <h2>Think You Know Us? 🧩</h2>
+          <p class="line-text">Let's find out how well you've been paying attention...
+Match the memories, Mr. Pookie Sharma. No pressure... but I'm definitely judging your performance 😏❤️</p>
+        </div>
+        <div class="memory-grid" id="memoryGrid">
+          ${deck
+            .map(
+              (card) => `
+            <button class="memory-card" type="button" data-id="${card.id}" data-key="${card.key}" aria-label="Memory card">
+              <span class="memory-inner">
+                <span class="memory-front">♡</span>
+                <span class="memory-back"><img src="${card.src}" alt=""></span>
+              </span>
+            </button>
+          `,
+            )
+            .join("")}
+        </div>
+      `);
+
+        document.querySelectorAll(".memory-card").forEach((card) => {
+          card.addEventListener("click", () => flipCard(card));
+        });
+      }
+
+      function flipCard(card) {
+        if (
+          state.busy ||
+          card.classList.contains("flipped") ||
+          card.classList.contains("matched")
+        )
+          return;
+        card.classList.add("flipped");
+        state.flipped.push(card);
+
+        if (state.flipped.length === 2) {
+          const [first, second] = state.flipped;
+          if (first.dataset.id === second.dataset.id) {
+            first.classList.add("matched");
+            second.classList.add("matched");
+            state.matched.add(first.dataset.id);
+            state.flipped = [];
+            if (state.matched.size === memoryImages.length) {
+              window.setTimeout(renderMemoryWin, 650);
+            }
+          } else {
+            state.busy = true;
+            window.setTimeout(() => {
+              first.classList.remove("flipped");
+              second.classList.remove("flipped");
+              state.flipped = [];
+              state.busy = false;
+            }, 760);
+          }
+        }
+      }
+
+      function renderMemoryWin() {
+        completeOnly("memory");
+        burstConfetti(90);
+        stageHTML(`
+        <h2>Okay, I'm Impressed 😌❤️</h2>
+        <p class="line-text">Well done, Mr. Pookie Sharma. You matched all the memories, completed the challenge, and officially proved that you've been paying attention. But honestly, the real prize isn't finishing this little game... it's knowing that somewhere along the way, you managed to win my heart too. But between us, the biggest achievement happened long before this game started. You didn't just win these points today... you won a permanent place in my heart.</p>
+        <div class="actions">
+          <button class="btn" type="button" id="dontClick">Don't Click This 😏</button>
+        </div>
+      `);
+        document
+          .querySelector("#dontClick")
+          .addEventListener("click", renderMemoryEnd);
+      }
+
+      function renderMemoryEnd() {
+        stageHTML(`
+        <h2>Excuse Me 🤨❤️</h2>
+        <p class="line-text">Didn't I literally tell you not to click this?
+And yet here you are.
+
+But sorry... that's it. The envelopes are finished, the game is over, and you've officially reached the end. Now stop clicking random buttons 😌✨
+
+Anyway... there's nothing here. Go be cute somewhere in someone else chat...  😌❤️</p>
+        <div class="actions">
+          <button class="btn secondary" type="button" id="exploreAgain">Explore Again</button>
+          <a class="btn" href="${WHATSAPP_URL}" target="_blank" rel="noopener">Talk To Me</a>
+        </div>
+      `);
+        document
+          .querySelector("#exploreAgain")
+          .addEventListener("click", resetExperience);
+      }
+
+      function completeOnly(id) {
+        state.completed.add(id);
+        renderEnvelopes();
+      }
+
+      function closeEnvelope() {
+        renderEnvelopes();
+        showScreen("homeScreen");
+      }
+
+      function resetExperience() {
+        state.pin = "";
+        state.readyNoCount = 0;
+        state.completed = new Set();
+        state.activeEnvelope = null;
+        state.flowerStep = 0;
+        state.letterStep = 0;
+        state.flipped = [];
+        state.matched = new Set();
+        state.busy = false;
+        pinImage.src = PIN_IMAGE;
+        pinEntry.style.display = "";
+        pinSuccess.classList.remove("show");
+        readyTitle.textContent = "Hey Handsome 😌❤️";
+        readyText.textContent =
+          "I have a little surprise waiting for you.\nWant to see it?";
+        readyActions.innerHTML = `
+        <button class="btn" type="button" id="yesBtnReset">YES</button>
+        <button class="btn secondary" type="button" id="noBtnReset">NO</button>
+      `;
+        document
+          .querySelector("#yesBtnReset")
+          .addEventListener("click", goHome);
+        document
+          .querySelector("#noBtnReset")
+          .addEventListener("click", handleNo);
+        setupPin();
+        renderEnvelopes();
+        showScreen("introScreen");
+      }
+
+      function burstConfetti(count = 60) {
+        const colors = ["#efd28f", "#fff2c5", "#d99a91", "#fff8ec", "#9f6aac"];
+        for (let i = 0; i < count; i++) {
+          const piece = document.createElement("span");
+          piece.className = "confetti-piece";
+          piece.style.setProperty("--x", `${Math.random() * 100}%`);
+          piece.style.setProperty(
+            "--c",
+            colors[Math.floor(Math.random() * colors.length)],
+          );
+          piece.style.setProperty("--d", `${2.4 + Math.random() * 2.4}s`);
+          piece.style.setProperty("--drift", `${-130 + Math.random() * 260}px`);
+          piece.style.animationDelay = `${Math.random() * 0.45}s`;
+          confetti.appendChild(piece);
+          piece.addEventListener("animationend", () => piece.remove());
+        }
+      }
+
+      function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+      }
+
+      document.addEventListener("click", (event) => {
+        const target = event.target.closest("[data-go]");
+        if (target) showScreen(target.dataset.go);
+      });
+
+      yesBtn.addEventListener("click", goHome);
+      noBtn.addEventListener("click", handleNo);
+      backHome.addEventListener("click", closeEnvelope);
+
+      musicToggle.addEventListener("click", async () => {
+        musicToggle.classList.toggle("is-on");
+        if (!bgMusic.getAttribute("src")) return;
+        try {
+          if (bgMusic.paused) await bgMusic.play();
+          else bgMusic.pause();
+        } catch (error) {
+          musicToggle.classList.remove("is-on");
+        }
+      });
+
+      window.addEventListener("load", () => {
+        createParticles();
+        setupPin();
+        renderEnvelopes();
+        window.setTimeout(() => loader.classList.add("hide"), 800);
+      });
+    </script>
+  </body>
+</html>
